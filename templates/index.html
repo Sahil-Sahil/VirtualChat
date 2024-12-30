@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Language Learning Chat</title>
+  <!-- Point to your updated CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <h1>
+    <span>Virtual Chat</span>
+  </h1>
+
+  <div class="container">
+    <div class="card-effect">
+      <div id="setup-form" class="setup-form">
+
+        <!-- 1) Select Language (no more dropdown) -->
+        <div class="form-group">
+          <label for="language">Select Language:</label>
+          <input type="hidden" id="language" value="English" required />
+          <div class="option-group" id="languageOptions">
+            <div class="option-item selected" data-value="English">English</div>
+            <div class="option-item" data-value="German">German</div>
+          </div>
+        </div>
+
+        <!-- 2) Chat Partner Gender -->
+        <div class="form-group">
+          <label for="gender">Chat Partner Gender:</label>
+          <input type="hidden" id="gender" value="male" required />
+          <div class="option-group" id="genderOptions">
+            <div class="option-item selected" data-value="male">Male</div>
+            <div class="option-item" data-value="female">Female</div>
+          </div>
+        </div>
+
+        <!-- 3) Language Level -->
+        <div class="form-group">
+          <label for="level">Language Level:</label>
+          <input type="hidden" id="level" value="A1" required />
+          <div class="option-group" id="levelOptions">
+            <div class="option-item selected" data-value="A1">A1 - Beginner</div>
+            <div class="option-item" data-value="A2">A2 - Elementary</div>
+            <div class="option-item" data-value="B1">B1 - Intermediate</div>
+            <div class="option-item" data-value="B2">B2 - Upper Intermediate</div>
+            <div class="option-item" data-value="C1">C1 - Advanced</div>
+            <div class="option-item" data-value="C2">C2 - Mastery</div>
+          </div>
+        </div>
+
+        <!-- 4) Conversation Topic remains a normal input -->
+        <div class="form-group">
+          <label for="topic">Conversation Topic:</label>
+          <input
+            type="text"
+            id="topic"
+            required
+            placeholder="Enter a topic..."
+          />
+        </div>
+
+        <button onclick="initializeChat()" class="btn-primary">Start Chat</button>
+      </div>
+
+      <!-- Chat container (unchanged) -->
+      <div id="chat-container" class="chat-container" style="display: none;">
+        <div class="chat-header">
+          <div class="header-content">
+            <h2 id="persona-name"></h2>
+            <p id="persona-info"></p>
+          </div>
+          <button onclick="endChat()" class="btn-end-chat">End Chat</button>
+        </div>
+        <div id="chat-messages" class="chat-messages"></div>
+        <div class="chat-input">
+          <input type="text" id="message-input" placeholder="Type your message..."/>
+          <button onclick="sendMessage()" class="btn-send">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Point to your main.js as before -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+  <!-- Simple JS for clickable "cards" -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // For each group of options (language, gender, level):
+      document.querySelectorAll('.option-group').forEach(group => {
+        group.addEventListener('click', (e) => {
+          if (e.target.classList.contains('option-item')) {
+            // Clear previously selected item
+            group.querySelectorAll('.option-item').forEach(item => {
+              item.classList.remove('selected');
+            });
+            
+            // Mark the clicked item as selected
+            e.target.classList.add('selected');
+
+            // Update the hidden input
+            const value = e.target.getAttribute('data-value');
+            // e.g. #languageOptions => #language
+            const hiddenInputId = group.id.replace('Options', '');
+            document.getElementById(hiddenInputId).value = value;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
